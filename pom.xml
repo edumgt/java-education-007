@@ -28,6 +28,13 @@
             <version>3.0.5</version>
         </dependency>
 
+ <!-- https://mvnrepository.com/artifact/kr.dogfoot/hwplib -->
+<dependency>
+    <groupId>kr.dogfoot</groupId>
+    <artifactId>hwplib</artifactId>
+    <version>1.0.4</version>
+</dependency>
+
         <!-- Log4j2 API -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
