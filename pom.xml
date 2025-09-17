@@ -14,21 +14,20 @@
     <name>Log4j2 Demo</name>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>  <!-- JDK 버전에 맞게 -->
+        <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j2.version>2.23.1</log4j2.version>
     </properties>
 
     <dependencies>
-        
-        <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
+        <!-- PDFBox -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
             <version>3.0.5</version>
         </dependency>
-        
+
         <!-- Log4j2 API -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -36,7 +35,7 @@
             <version>${log4j2.version}</version>
         </dependency>
 
-        <!-- Log4j2 Core (실제 구현체) -->
+        <!-- Log4j2 Core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -55,6 +54,30 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>
+            </plugin>
+
+            <!-- Maven Shade Plugin (Fat JAR 생성) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <!-- ✅ 실행 메인 클래스 지정 -->
+                                    <mainClass>com.sample.PdfBoxExample</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
