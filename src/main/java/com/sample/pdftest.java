@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class PdfBoxExample {
+public class pdftest {
     // ✅ Logger 선언
-    private static final Logger logger = LogManager.getLogger(PdfBoxExample.class);
+    private static final Logger logger = LogManager.getLogger(pdftest.class);
 
     public static void main(String[] args) {
         try (PDDocument document = new PDDocument()) {
