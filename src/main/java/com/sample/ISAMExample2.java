@@ -100,7 +100,7 @@ public class ISAMExample2 {
         insertRecord(3003, "Lázaro Cárdenas", 17.9582, -102.1930);
 
         // 검색 예시
-        System.out.println("찾은 레코드: " + findRecord(2005)); // Osaka
-        System.out.println("찾은 레코드: " + findRecord(3003)); // Lázaro Cárdenas
+        // System.out.println("찾은 레코드: " + findRecord(2005)); // Osaka
+        // System.out.println("찾은 레코드: " + findRecord(3003)); // Lázaro Cárdenas
     }
 }

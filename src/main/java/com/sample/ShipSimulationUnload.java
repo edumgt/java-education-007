@@ -1,0 +1,165 @@
+package com.sample;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+public class ShipSimulationUnload {
+
+    private static final String DATA_FILE = "ship_data.dat";
+    private static final String INDEX_FILE = "ship_index.dat";
+    private static final int RECORD_SIZE = 100;
+
+    // 거리 계산 (Haversine formula)
+    public static double distance(double lat1, double lon1, double lat2, double lon2) {
+        double R = 6371;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLon/2) * Math.sin(dLon/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    // 배 위치 저장
+    public static synchronized void insertShipRecord(String shipId, double lat, double lon,
+                                                     int targetPortId, int containers) throws IOException {
+        RandomAccessFile dataFile = new RandomAccessFile(DATA_FILE, "rw");
+        RandomAccessFile indexFile = new RandomAccessFile(INDEX_FILE, "rw");
+
+        long pos = dataFile.length();
+        dataFile.seek(pos);
+
+        String shipStr = String.format("%-10s", shipId);
+        String latStr = String.format("%15.6f", lat);
+        String lonStr = String.format("%15.6f", lon);
+        String portStr = String.format("%05d", targetPortId);
+        String contStr = String.format("%05d", containers);
+
+        String record = shipStr + "|" + latStr + "|" + lonStr + "|" + portStr + "|" + contStr;
+        record = String.format("%-" + RECORD_SIZE + "s", record);
+
+        dataFile.write(record.getBytes(StandardCharsets.UTF_8));
+        indexFile.seek(indexFile.length());
+        indexFile.write((shipId + "," + pos + "\n").getBytes(StandardCharsets.UTF_8));
+
+        dataFile.close();
+        indexFile.close();
+    }
+
+    // -----------------------------
+    // Port 클래스
+    // -----------------------------
+    static class Port {
+        int portId;
+        String name;
+        double lat, lon;
+        double costPerContainer;
+
+        public Port(int portId, String name, double lat, double lon, double costPerContainer) {
+            this.portId = portId;
+            this.name = name;
+            this.lat = lat;
+            this.lon = lon;
+            this.costPerContainer = costPerContainer;
+        }
+    }
+
+    // -----------------------------
+    // Ship 클래스 (Runnable)
+    // -----------------------------
+    static class Ship implements Runnable {
+        private final String shipId;
+        private final double[][] route;
+        private final int[] portIds;
+        private final double speed;
+        private int containers;
+        private final List<Port> ports; // 항구 정보
+
+        public Ship(String shipId, double[][] route, int[] portIds, double speed,
+                    int containers, List<Port> ports) {
+            this.shipId = shipId;
+            this.route = route;
+            this.portIds = portIds;
+            this.speed = speed;
+            this.containers = containers;
+            this.ports = ports;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (containers > 0) { // 컨테이너 다 하적하면 종료
+                    for (int i = 0; i < route.length - 1; i++) {
+                        double lat1 = route[i][0];
+                        double lon1 = route[i][1];
+                        double lat2 = route[i + 1][0];
+                        double lon2 = route[i + 1][1];
+
+                        double totalDist = distance(lat1, lon1, lat2, lon2);
+                        int steps = (int) Math.ceil(totalDist / speed);
+
+                        for (int step = 0; step < steps; step++) {
+                            double ratio = Math.min(1.0, (step * speed) / totalDist);
+                            double lat = lat1 + (lat2 - lat1) * ratio;
+                            double lon = lon1 + (lon2 - lon1) * ratio;
+
+                            insertShipRecord(shipId, lat, lon, portIds[i + 1], containers);
+
+                            // 도착 체크 (20km 이내)
+                            for (Port p : ports) {
+                                double d = distance(lat, lon, p.lat, p.lon);
+                                if (d <= 20) {
+                                    // 가장 저렴한 항구인지 확인
+                                    Port cheapest = ports.stream()
+                                            .min(Comparator.comparingDouble(pp -> pp.costPerContainer))
+                                            .orElse(p);
+
+                                    if (p.portId == cheapest.portId) {
+                                        int unload = Math.min(10, containers); // 예: 최대 10개씩 하적
+                                        containers -= unload;
+                                        System.out.printf("[%s] %s 도착! %d개 하적 (남은 %d개)%n",
+                                                shipId, p.name, unload, containers);
+                                    }
+                                }
+                            }
+
+                            if (containers <= 0) break;
+
+                            Thread.sleep(10000); // 10초마다 이동
+                        }
+                        if (containers <= 0) break;
+                    }
+                }
+                System.out.printf("[%s] 모든 컨테이너 하적 완료!%n", shipId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // -----------------------------
+    // Main 실행
+    // -----------------------------
+    public static void main(String[] args) {
+        // 항로 정의 (Tokyo → LA → Veracruz)
+        double[][] route = {
+                {35.6762, 139.6503},   // Tokyo
+                {33.7406, -118.2760},  // Los Angeles
+                {19.1738, -96.1342}    // Veracruz
+        };
+        int[] portIds = {2001, 1001, 3001};
+
+        // 항구 정보 (id, name, lat, lon, costPerContainer)
+        List<Port> ports = Arrays.asList(
+                new Port(2001, "Tokyo", 35.6762, 139.6503, 50),
+                new Port(1001, "Los Angeles", 33.7406, -118.2760, 40),
+                new Port(3001, "Veracruz", 19.1738, -96.1342, 60)
+        );
+
+        // Ship 인스턴스 실행
+        Ship ship1 = new Ship("SHIP01", route, portIds, 3000.0, 50, ports);
+        Thread t1 = new Thread(ship1);
+        t1.start();
+    }
+}
