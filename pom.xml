@@ -28,12 +28,20 @@
             <version>3.0.5</version>
         </dependency>
 
- <!-- https://mvnrepository.com/artifact/kr.dogfoot/hwplib -->
-<dependency>
-    <groupId>kr.dogfoot</groupId>
-    <artifactId>hwplib</artifactId>
-    <version>1.0.4</version>
-</dependency>
+        <!-- Maven 예시 -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.11.0</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/kr.dogfoot/hwplib -->
+        <dependency>
+            <groupId>kr.dogfoot</groupId>
+            <artifactId>hwplib</artifactId>
+            <version>1.0.4</version>
+        </dependency>
 
         <!-- Log4j2 API -->
         <dependency>
