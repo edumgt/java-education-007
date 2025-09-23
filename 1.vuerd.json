@@ -1,0 +1,158 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dineug/erd-editor/main/json-schema/schema.json",
+  "version": "3.0.0",
+  "settings": {
+    "width": 2000,
+    "height": 2000,
+    "scrollTop": 0,
+    "scrollLeft": -1.56,
+    "zoomLevel": 1,
+    "show": 431,
+    "database": 4,
+    "databaseName": "",
+    "canvasType": "ERD",
+    "language": 1,
+    "tableNameCase": 4,
+    "columnNameCase": 2,
+    "bracketType": 1,
+    "relationshipDataTypeSync": true,
+    "relationshipOptimization": false,
+    "columnOrder": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "maxWidthComment": -1,
+    "ignoreSaveSettings": 0
+  },
+  "doc": {
+    "tableIds": [
+      "ks5zjpqmEg1evta8glNX9"
+    ],
+    "relationshipIds": [],
+    "indexIds": [],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {
+      "ks5zjpqmEg1evta8glNX9": {
+        "id": "ks5zjpqmEg1evta8glNX9",
+        "name": "class",
+        "comment": "과목",
+        "columnIds": [
+          "vpkHS_5r3LIpkkBEaxUGB",
+          "HXYMc5AHXARDaWpQUjBmJ",
+          "jDYIk7fUEx-er6ZHJoKKv"
+        ],
+        "seqColumnIds": [
+          "JTLK74xcJtQbEraYHWBR-",
+          "vpkHS_5r3LIpkkBEaxUGB",
+          "HXYMc5AHXARDaWpQUjBmJ",
+          "jDYIk7fUEx-er6ZHJoKKv"
+        ],
+        "ui": {
+          "x": 30.5595,
+          "y": 13,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1758599119661,
+          "createAt": 1758598651456
+        }
+      }
+    },
+    "tableColumnEntities": {
+      "JTLK74xcJtQbEraYHWBR-": {
+        "id": "JTLK74xcJtQbEraYHWBR-",
+        "tableId": "ks5zjpqmEg1evta8glNX9",
+        "name": "",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1758598780995,
+          "createAt": 1758598780995
+        }
+      },
+      "vpkHS_5r3LIpkkBEaxUGB": {
+        "id": "vpkHS_5r3LIpkkBEaxUGB",
+        "tableId": "ks5zjpqmEg1evta8glNX9",
+        "name": "class_id",
+        "comment": "과목을 구분하는 아이디",
+        "dataType": "VARCHAR",
+        "default": "A001",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 129,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1758599128707,
+          "createAt": 1758598790306
+        }
+      },
+      "HXYMc5AHXARDaWpQUjBmJ": {
+        "id": "HXYMc5AHXARDaWpQUjBmJ",
+        "tableId": "ks5zjpqmEg1evta8glNX9",
+        "name": "class_name",
+        "comment": "과목명",
+        "dataType": "VARCHAR",
+        "default": "과학",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 61,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1758599047264,
+          "createAt": 1758599013496
+        }
+      },
+      "jDYIk7fUEx-er6ZHJoKKv": {
+        "id": "jDYIk7fUEx-er6ZHJoKKv",
+        "tableId": "ks5zjpqmEg1evta8glNX9",
+        "name": "class_eng_name",
+        "comment": "영문과목명",
+        "dataType": "VARCHAR",
+        "default": "English",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 86,
+          "widthComment": 62,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1758599122925,
+          "createAt": 1758599059754
+        }
+      }
+    },
+    "relationshipEntities": {},
+    "indexEntities": {},
+    "indexColumnEntities": {},
+    "memoEntities": {}
+  }
+}
